@@ -1,3 +1,4 @@
+# config/packages/doctrine.yaml
 doctrine:
     dbal:
         default_connection: default

@@ -1,0 +1,3 @@
+migrations_paths:
+    'codex': '../../src/Migrations/Codex'
+em: codex

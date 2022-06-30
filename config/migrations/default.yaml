@@ -1,0 +1,3 @@
+migrations_paths:
+    'default': '../../src/Migrations/Main'
+em: default
