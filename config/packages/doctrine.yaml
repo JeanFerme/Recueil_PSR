@@ -6,13 +6,13 @@ doctrine:
                 # configure these for your database server
                 url: '%env(resolve:DATABASE_URL)%'
                 driver: 'pdo_mysql'
-                server_version: '5.7'
+                server_version: 'mariadb-10.5.8'
                 charset: utf8mb4
             codex:
                 # configure these for your database server
                 url: '%env(resolve:DATABASE_CODEX_URL)%'
                 driver: 'pdo_mysql'
-                server_version: '5.7'
+                server_version: 'mariadb-10.5.8'
                 charset: utf8mb4
     orm:
         default_entity_manager: default
@@ -23,7 +23,8 @@ doctrine:
                     Main:
                         is_bundle: false
                         type: annotation
-                        dir: '%kernel.project_dir%/src/Entity/Main'
+                        #dir: '%kernel.project_dir%/src/Entity/Main'
+                        dir: 'D:\xampp\htdocs\Recueil_PSR\src\Entity\Main'
                         prefix: 'App\Entity\Main'
                         alias: Main
             codex:
@@ -32,6 +33,7 @@ doctrine:
                     Codex:
                         is_bundle: false
                         type: annotation
-                        dir: '%kernel.project_dir%/src/Entity/Codex'
+                        #dir: '%kernel.project_dir%/src/Entity/Codex'
+                        dir: 'D:\xampp\htdocs\Recueil_PSR\src\Entity\Codex'
                         prefix: 'App\Entity\Codex'
                         alias: Codex
