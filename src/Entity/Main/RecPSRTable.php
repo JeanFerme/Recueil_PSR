@@ -7,69 +7,109 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: RecPSRTableRepository::class)]
+/**
+ * @ORM\Entity(repositoryClass=RecPSRTableRepository::class)
+ */
 class RecPSRTable
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private $id;
 
-    #[ORM\Column(type: 'string', length: 400)]
+    /**
+     * @ORM\Column(type="string", length=400)
+     */
     private $substance;
 
-    #[ORM\Column(type: 'string', length: 300)]
+    /**
+     * @ORM\Column(type="string", length=300)
+     */
     private $produit;
 
-    #[ORM\Column(type: 'string', length: 10)]
+    /**
+     * @ORM\Column(type="string", length=10)
+     */
     private $code_atc;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $niveau_de_risque;
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $niveau_risque;
 
-    #[ORM\Column(type: 'string', length: 1024)]
+    /**
+     * @ORM\Column(type="string", length=1024, nullable=true)
+     */
     private $problematique;
 
-    #[ORM\Column(type: 'boolean')]
+    /**
+     * @ORM\Column(type="boolean")
+     */
     private $mesure_impact;
 
-    #[ORM\Column(type: 'string', length: 1024, nullable: true)]
+    /**
+     * @ORM\Column(type="string", length=1024, nullable=true)
+     */
     private $resultat_surv;
 
-    #[ORM\ManyToOne(targetEntity: OrigineRef::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private $origine_id;
+    /**
+     * @ORM\ManyToOne(targetEntity=OrigineRef::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $origine;
 
-    #[ORM\ManyToOne(targetEntity: DMMRef::class)]
-    private $dmm_id;
+    /**
+     * @ORM\ManyToOne(targetEntity=DMMRef::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $dmm;
 
-    #[ORM\ManyToMany(targetEntity: PropOutSurvRef::class, inversedBy: 'recPSRTables')]
-    private $propOutSurv;
+    /**
+     * @ORM\ManyToMany(targetEntity=PropOutSurvRef::class, inversedBy="recPSRTables")
+     */
+    private $propSurv;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
     private $priorisation;
 
-    #[ORM\Column(type: 'string', length: 1024, nullable: true)]
+    /**
+     * @ORM\Column(type="string", length=1024, nullable=true)
+     */
     private $mesMaitRisk;
 
-    #[ORM\ManyToOne(targetEntity: MesImpact::class)]
+    /**
+     * @ORM\ManyToOne(targetEntity=MesImpact::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
     private $mesImpact;
 
-    #[ORM\Column(type: 'string', length: 1024, nullable: true)]
+    /**
+     * @ORM\Column(type="string", length=1024, nullable=true)
+     */
     private $mesImpactComment;
 
-    #[ORM\Column(type: 'string', length: 2048, nullable: true)]
+    /**
+     * @ORM\Column(type="string", length=2048, nullable=true)
+     */
     private $commentaire;
 
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
     private $listSurv;
 
-    #[ORM\Column(type: 'boolean')]
+    /**
+     * @ORM\Column(type="boolean")
+     */
     private $visible;
 
     public function __construct()
     {
-        $this->propOutSurv = new ArrayCollection();
+        $this->propSurv = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -113,14 +153,14 @@ class RecPSRTable
         return $this;
     }
 
-    public function getNiveauDeRisque(): ?int
+    public function getNiveauRisque(): ?int
     {
-        return $this->niveau_de_risque;
+        return $this->niveau_risque;
     }
 
-    public function setNiveauDeRisque(?int $niveau_de_risque): self
+    public function setNiveauRisque(?int $niveau_risque): self
     {
-        $this->niveau_de_risque = $niveau_de_risque;
+        $this->niveau_risque = $niveau_risque;
 
         return $this;
     }
@@ -130,7 +170,7 @@ class RecPSRTable
         return $this->problematique;
     }
 
-    public function setProblematique(string $problematique): self
+    public function setProblematique(?string $problematique): self
     {
         $this->problematique = $problematique;
 
@@ -161,26 +201,26 @@ class RecPSRTable
         return $this;
     }
 
-    public function getOrigineId(): ?OrigineRef
+    public function getOrigine(): ?OrigineRef
     {
-        return $this->origine_id;
+        return $this->origine;
     }
 
-    public function setOrigineId(OrigineRef $origine_id): self
+    public function setOrigine(?OrigineRef $origine): self
     {
-        $this->origine_id = $origine_id;
+        $this->origine = $origine;
 
         return $this;
     }
 
-    public function getDmmId(): ?DMMRef
+    public function getDmm(): ?DMMRef
     {
-        return $this->dmm_id;
+        return $this->dmm;
     }
 
-    public function setDmmId(?DMMRef $dmm_id): self
+    public function setDmm(?DMMRef $dmm): self
     {
-        $this->dmm_id = $dmm_id;
+        $this->dmm = $dmm;
 
         return $this;
     }
@@ -188,23 +228,23 @@ class RecPSRTable
     /**
      * @return Collection<int, PropOutSurvRef>
      */
-    public function getPropOutSurvId(): Collection
+    public function getPropSurv(): Collection
     {
-        return $this->propOutSurv;
+        return $this->propSurv;
     }
 
-    public function addPropOutSurvId(PropOutSurvRef $propOutSurvId): self
+    public function addPropSurv(PropOutSurvRef $propSurv): self
     {
-        if (!$this->propOutSurv->contains($propOutSurvId)) {
-            $this->propOutSurv[] = $propOutSurvId;
+        if (!$this->propSurv->contains($propSurv)) {
+            $this->propSurv[] = $propSurv;
         }
 
         return $this;
     }
 
-    public function removePropOutSurvId(PropOutSurvRef $propOutSurvId): self
+    public function removePropSurv(PropOutSurvRef $propSurv): self
     {
-        $this->propOutSurv->removeElement($propOutSurvId);
+        $this->propSurv->removeElement($propSurv);
 
         return $this;
     }

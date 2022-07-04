@@ -5,15 +5,21 @@ namespace App\Entity\Main;
 use App\Repository\Main\DMMRefRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: DMMRefRepository::class)]
+/**
+ * @ORM\Entity(repositoryClass=DMMRefRepository::class)
+ */
 class DMMRef
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private $id;
 
-    #[ORM\Column(type: 'string', length: 10)]
+    /**
+     * @ORM\Column(type="string", length=10)
+     */
     private $pole;
 
     public function getId(): ?int

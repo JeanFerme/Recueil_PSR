@@ -23,8 +23,7 @@ doctrine:
                     Main:
                         is_bundle: false
                         type: annotation
-                        #dir: '%kernel.project_dir%/src/Entity/Main'
-                        dir: 'D:\xampp\htdocs\Recueil_PSR\src\Entity\Main'
+                        dir: '%kernel.project_dir%/src/Entity/Main'
                         prefix: 'App\Entity\Main'
                         alias: Main
             codex:
@@ -33,7 +32,31 @@ doctrine:
                     Codex:
                         is_bundle: false
                         type: annotation
-                        #dir: '%kernel.project_dir%/src/Entity/Codex'
-                        dir: 'D:\xampp\htdocs\Recueil_PSR\src\Entity\Codex'
+                        dir: '%kernel.project_dir%/src/Entity/Codex'
                         prefix: 'App\Entity\Codex'
                         alias: Codex
+
+when@test:
+    doctrine:
+        dbal:
+            # "TEST_TOKEN" is typically set by ParaTest
+            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+
+when@prod:
+    doctrine:
+        orm:
+            auto_generate_proxy_classes: false
+            query_cache_driver:
+                type: pool
+                pool: doctrine.system_cache_pool
+            result_cache_driver:
+                type: pool
+                pool: doctrine.result_cache_pool
+
+    framework:
+        cache:
+            pools:
+                doctrine.result_cache_pool:
+                    adapter: cache.app
+                doctrine.system_cache_pool:
+                    adapter: cache.system

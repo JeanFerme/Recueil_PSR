@@ -5,15 +5,21 @@ namespace App\Entity\Main;
 use App\Repository\Main\MesImpactRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: MesImpactRepository::class)]
+/**
+ * @ORM\Entity(repositoryClass=MesImpactRepository::class)
+ */
 class MesImpact
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $libelle;
 
     public function getId(): ?int
