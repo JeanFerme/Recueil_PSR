@@ -1,24 +1,32 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Main;
 
-use App\Repository\PropOutSurvRefRepository;
+use App\Repository\Main\PropOutSurvRefRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PropOutSurvRefRepository::class)]
+/**
+ * @ORM\Entity(repositoryClass=PropOutSurvRefRepository::class)
+ */
 class PropOutSurvRef
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $proposition;
 
-    #[ORM\ManyToMany(targetEntity: RecPSRTable::class, mappedBy: 'propOutSurv_id')]
+    /**
+     * @ORM\ManyToMany(targetEntity=RecPSRTable::class, mappedBy="propSurv")
+     */
     private $recPSRTables;
 
     public function __construct()
@@ -55,7 +63,7 @@ class PropOutSurvRef
     {
         if (!$this->recPSRTables->contains($recPSRTable)) {
             $this->recPSRTables[] = $recPSRTable;
-            $recPSRTable->addPropOutSurvId($this);
+            $recPSRTable->addPropSurv($this);
         }
 
         return $this;
@@ -64,7 +72,7 @@ class PropOutSurvRef
     public function removeRecPSRTable(RecPSRTable $recPSRTable): self
     {
         if ($this->recPSRTables->removeElement($recPSRTable)) {
-            $recPSRTable->removePropOutSurvId($this);
+            $recPSRTable->removePropSurv($this);
         }
 
         return $this;
