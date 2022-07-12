@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CreateRecController!{% endblock %}
+
+{% block body %}
+<select class="form-select" aria-label="Default select example">
+  <option selected>Select origine</option>
+    {% for origine in origines %}
+      <option value={{ origine.id }}>{{ origine.origine }}</option>
+    {% endfor %}
+</select>
+{% endblock %}

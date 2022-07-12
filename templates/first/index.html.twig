@@ -27,6 +27,11 @@
       <td>mesMait</td>
       <td>propOut</td>
     </tr>
+    {% for en in tables %}
+    <tr>
+      <td>{{ en.origine }}</td>
+    </tr>
+    {% enfor %}
   </tbody>
 </table>
 {% endblock %}

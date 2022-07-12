@@ -3,22 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\Main\OrigineRef;
-use App\Entity\Main\RecPSRTable;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class FirstController extends AbstractController
+class CreateRecController extends AbstractController
 {
-    #[Route('/first', name: 'app_first')]
+    #[Route('/newrec', name: 'app_create_rec')]
     public function index(ManagerRegistry $doctrine): Response
     {
-        $tables = $doctrine->getRepository(RecPSRTable::class)->findAll();
+        $origines = $doctrine->getRepository(OrigineRef::class)->findAll();
 
-        return $this->render('first/index.html.twig', [
-            'controller_name' => 'FirstController',
-            'tables' => $tables,
+        return $this->render('create_rec/index.html.twig', [
+            'controller_name' => 'CreateRecController',
+            'origines' => $origines,
         ]);
     }
 }
