@@ -39,6 +39,40 @@ class SAVUUTILRepository extends ServiceEntityRepository
         }
     }
 
+   /**
+    * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
+    */
+    public function findLikenomSubstance($value): array
+    {
+        return $this->createQueryBuilder('s')
+             // ->andWhere('s.nomSubstance = :val')
+             // ->setParameter('val', $value)
+             ->andWhere('s.nomSubstance LIKE :val')
+             ->setParameter('val', '%' . $value . '%')
+             ->orderBy('s.id', 'ASC')
+         //    ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+   /**
+    * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
+    */
+    public function findLikenomVU($value): array
+    {
+        return $this->createQueryBuilder('s')
+             // ->andWhere('s.nomSubstance = :val')
+             // ->setParameter('val', $value)
+             ->andWhere('s.nomVU LIKE :val')
+             ->setParameter('val', '%' . $value . '%')
+             ->orderBy('s.id', 'ASC')
+         //    ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+  
 //    /**
 //     * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
 //     */

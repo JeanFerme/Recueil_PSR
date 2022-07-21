@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AfficheCodexController!{% endblock %}
+
+{% block body %}
+
+
+<div class="container">
+    {# <h1>Hello {{ controller_name }}! ✅</h1> #}
+
+    {# This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code><a href="{{ 'D:/www_htdocs/Recueil_PSR/src/Controller/AfficheCodexController.php'|file_link(0) }}">src/Controller/AfficheCodexController.php</a></code></li>
+        <li>Your template at <code><a href="{{ 'D:/www_htdocs/Recueil_PSR/templates/affiche_codex/index.html.twig'|file_link(0) }}">templates/affiche_codex/index.html.twig</a></code></li>
+    </ul> #}
+
+
+
+    <table class="table table-dark table-striped">
+        <thead>
+          <tr>
+            <th>nomVU</th>
+            <th>nomSubstance</th>
+            <th>ClasseATC</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for medoc in medoc %}
+                <tr>
+                    <td>{{ medoc.nomVU }}</td>
+                    <td>{{ medoc.nomSubstance }}</td>
+                    <td>{{ medoc.DboClasseATCLibAbr }}</td>
+                </tr>        
+            {% endfor %}
+        </tbody>
+      </table>
+
+
+
+
+    {# {{ dump(medoc) }} #}
+
+</div>
+{% endblock %}
