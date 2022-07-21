@@ -3,8 +3,9 @@
 {% block title %}Enter new recueil data{% endblock %}
 
 {% block body %}
-{{ form_start(form) }}
+
 <div class="container">
+    {{ form_start(form) }}
     <div class="row">
         {{ form_row(form.origine, {'row_attr': {'class' : 'col'}}) }}
         {{ form_row(form.dmm, {'row_attr': {'class' : 'col'}}) }}
@@ -28,6 +29,8 @@
     {{ form_row(form.commentaire) }}
     {{ form_row(form.listSurv) }}
     {{ form_row(form.visible) }}
+
+    {{ form_end(form) }}
 </div>
-{{ form_end(form) }}
+
 {% endblock %}

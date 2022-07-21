@@ -20,17 +20,17 @@ class RecPSRTable
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=400)
+     * @ORM\Column(type="string", length=400, nullable=true)
      */
     private $substance;
 
     /**
-     * @ORM\Column(type="string", length=300)
+     * @ORM\Column(type="string", length=300, nullable=true)
      */
     private $produit;
 
     /**
-     * @ORM\Column(type="string", length=10)
+     * @ORM\Column(type="string", length=10, nullable=true)
      */
     private $code_atc;
 
@@ -43,11 +43,6 @@ class RecPSRTable
      * @ORM\Column(type="string", length=1024, nullable=true)
      */
     private $problematique;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $mesure_impact;
 
     /**
      * @ORM\Column(type="string", length=1024, nullable=true)
@@ -173,18 +168,6 @@ class RecPSRTable
     public function setProblematique(?string $problematique): self
     {
         $this->problematique = $problematique;
-
-        return $this;
-    }
-
-    public function isMesureImpact(): ?bool
-    {
-        return $this->mesure_impact;
-    }
-
-    public function setMesureImpact(bool $mesure_impact): self
-    {
-        $this->mesure_impact = $mesure_impact;
 
         return $this;
     }

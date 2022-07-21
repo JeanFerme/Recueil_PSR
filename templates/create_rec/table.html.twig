@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Hello FirstController!
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <a class="btn btn-primary" href="{{ path('app_create_rec') }}" role="button">New Recueil</a>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Origine</th>
+          <th scope="col">DMM</th>
+          <th scope="col">Substance</th>
+          <th scope="col">Produit</th>
+          <th scope="col">Code ATC</th>
+          <th scope="col">Niveau de risque</th>
+          <th scope="col">Mesure de maitrise</th>
+          <th scope="col">Proposition d'outil de surv</th>
+          <th scope="col">Modifier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">testOrigine</th>
+          <td>testDMM</td>
+          <td>Substance</td>
+          <td>Produit</td>
+          <td>code_atc</td>
+          <td>level</td>
+          <td>mesMait</td>
+          <td>propOut</td>
+          <td><button>modifier</button></td>
+        </tr>
+        {% for en in tables %}
+          <tr>
+            <td>{{ en.origine.origine }}</td>
+            <td>{{ en.dmm.pole }}</td>
+            <td>{{ en.substance }}</td>
+            <td>{{ en.produit }}</td>
+            <td>{{ en.codeatc }}</td>
+            <td>{{ en.niveaurisque }}</td>
+            <td>{{ en.mesMaitRisk }}</td>
+            <td>Proposition bidon</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
