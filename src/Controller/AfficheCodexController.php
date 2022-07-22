@@ -12,7 +12,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class AfficheCodexController extends AbstractController
-
 {
     #[Route('/affiche_codex', name: 'app_affiche_codex')]
     public function index(Request $request, ManagerRegistry $doctrine): Response
@@ -24,11 +23,9 @@ class AfficheCodexController extends AbstractController
                     ->getForm()
                     ;
         $form->handleRequest($request);
-
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-
             $medoc = $doctrine->getRepository(SAVUUTIL::class, 'codex')->findLike_nomVU_nomSubstance($data['denomination'],$data['DCI']);
             return $this->render('affiche_codex/index.html.twig', [
                 'form_rech_med' => $form->createView(),
@@ -37,8 +34,6 @@ class AfficheCodexController extends AbstractController
             ]);            
         }
 
-
-        // $medoc = $doctrine->getRepository(SAVUUTIL::class, 'codex')->findLikenomSubstance('Paracétamol');
         $medoc = $doctrine->getRepository(SAVUUTIL::class, 'codex')->findLike_nomVU_nomSubstance('','');
         return $this->render('affiche_codex/index.html.twig', [
             'form_rech_med' => $form->createView(),
@@ -46,6 +41,8 @@ class AfficheCodexController extends AbstractController
             'medoc' => $medoc
         ]);
     }
+
+
     public function FormRecherche()
     {
         $form = $this->createFormBuilder()

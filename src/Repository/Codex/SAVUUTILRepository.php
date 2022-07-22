@@ -40,6 +40,9 @@ class SAVUUTILRepository extends ServiceEntityRepository
     }
 
    /**
+     * recherche par DCI des medicaments dans CODEX
+     *
+    * @param [string] $value
     * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
     */
     public function findLikenomSubstance($value): array
@@ -57,25 +60,28 @@ class SAVUUTILRepository extends ServiceEntityRepository
     }
 
    /**
+    * recherche par denomination des medicaments dans CODEX
+    *
+    * @param [string] $value
     * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
     */
     public function findLikenomVU($value): array
     {
         return $this->createQueryBuilder('s')
-             // ->andWhere('s.nomSubstance = :val')
-             // ->setParameter('val', $value)
-             ->andWhere('s.nomVU LIKE :val')
-             ->setParameter('val', '%' . $value . '%')
-             ->orderBy('s.id', 'ASC')
-         //    ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+                    ->andWhere('s.nomVU LIKE :val')
+                    ->setParameter('val', '%' . $value . '%')
+                    ->orderBy('s.id', 'ASC')
+                    ->getQuery()
+                    ->getResult()
+                ;
     }
-  
-   /**
-    * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
-    */
+    /**
+     * recherche par denomination et/ou DCI des medicaments dans CODEX
+     *
+     * @param [string] $deno
+     * @param [string] $DCI
+     * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
+     */
     public function findLike_nomVU_nomSubstance($deno, $DCI): array
     {
         $result = $this->createQueryBuilder('s');
@@ -88,51 +94,18 @@ class SAVUUTILRepository extends ServiceEntityRepository
             $result = $result 
                         ->andWhere('s.nomSubstance LIKE :DCI')
                         ->setParameter('DCI', '%' . $DCI . '%');
-
         } elseif ($deno != '' and $DCI == '' ) {
             $result = $result 
                         ->andWhere('s.nomVU LIKE :deno')
                         ->setParameter('deno', '%' . $deno . '%');
-
         } else {
             $result = $result ->setMaxResults(100);
         }
-
-        // return $this->createQueryBuilder('s')
-        //      // ->andWhere('s.nomSubstance = :val')
-        //      // ->setParameter('val', $value)
-        //      ->andWhere('s.nomVU LIKE :val')
-        //      ->setParameter('val', '%' . $value . '%')
-             $result = $result
+            $result = $result
                         ->orderBy('s.id', 'ASC')
                         ->getQuery()
                         ->getResult()
                         ;
             return $result;
     }
-  
-//    /**
-//     * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?SAVUUTIL
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }
