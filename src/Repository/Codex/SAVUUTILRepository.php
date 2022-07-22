@@ -73,6 +73,44 @@ class SAVUUTILRepository extends ServiceEntityRepository
         ;
     }
   
+   /**
+    * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
+    */
+    public function findLike_nomVU_nomSubstance($deno, $DCI): array
+    {
+        $result = $this->createQueryBuilder('s');
+        if ($deno != '' and $DCI != '' ) {
+            $result = $result 
+                        ->andWhere('s.nomVU LIKE :deno AND s.nomSubstance LIKE :DCI')
+                        ->setParameter('deno', '%' . $deno . '%')
+                        ->setParameter('DCI', '%' . $DCI . '%');
+        } elseif ($deno == '' and $DCI != '' ) {
+            $result = $result 
+                        ->andWhere('s.nomSubstance LIKE :DCI')
+                        ->setParameter('DCI', '%' . $DCI . '%');
+
+        } elseif ($deno != '' and $DCI == '' ) {
+            $result = $result 
+                        ->andWhere('s.nomVU LIKE :deno')
+                        ->setParameter('deno', '%' . $deno . '%');
+
+        } else {
+            $result = $result ->setMaxResults(100);
+        }
+
+        // return $this->createQueryBuilder('s')
+        //      // ->andWhere('s.nomSubstance = :val')
+        //      // ->setParameter('val', $value)
+        //      ->andWhere('s.nomVU LIKE :val')
+        //      ->setParameter('val', '%' . $value . '%')
+             $result = $result
+                        ->orderBy('s.id', 'ASC')
+                        ->getQuery()
+                        ->getResult()
+                        ;
+            return $result;
+    }
+  
 //    /**
 //     * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
 //     */
