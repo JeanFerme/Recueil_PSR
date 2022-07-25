@@ -10,12 +10,17 @@ use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Codex\SAVUUTIL;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
 
 class AfficheCodexController extends AbstractController
 {
     #[Route('/affiche_codex', name: 'app_affiche_codex')]
     public function index(Request $request, ManagerRegistry $doctrine): Response
     {   
+
+
+        // Formulaire de recherche des médicaments par dénomination et/ou DCI
         $form =$this->createFormBuilder()
                     ->add('denomination',TextType::class, ['required' => false])
                     ->add('DCI',TextType::class, ['required' => false])
@@ -23,12 +28,39 @@ class AfficheCodexController extends AbstractController
                     ->getForm()
                     ;
         $form->handleRequest($request);
+
+
+        // Liste des médicaments recherchés
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $medoc = $doctrine->getRepository(SAVUUTIL::class, 'codex')->findLike_nomVU_nomSubstance($data['denomination'],$data['DCI']);}
+        else {
+            $medoc = $doctrine->getRepository(SAVUUTIL::class, 'codex')->findLike_nomVU_nomSubstance('','');
+        }
+
+
+        // Formulaire pour populer le menu déroulant
+        $formSelectMedic = $this 
+                    ->createFormBuilder()
+                    ->add('denomination',ChoiceType::class, 
+                            ['choices' => [
+                                'One' => 1,
+                                'Two' => 2,
+                                ],
+                            ]
+                        )                   
+                    ->add('submit', SubmitType::class, ['label' => 'Selection du médicament'])
+                    ->getForm()
+                    ;
+        $formSelectMedic->handleRequest($request); 
         
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $medoc = $doctrine->getRepository(SAVUUTIL::class, 'codex')->findLike_nomVU_nomSubstance($data['denomination'],$data['DCI']);
+            dump($data);
             return $this->render('affiche_codex/index.html.twig', [
                 'form_rech_med' => $form->createView(),
+                'form_select_med' => $formSelectMedic->createView(),
                 'controller_name' => 'AfficheCodexController',
                 'medoc' => $medoc
             ]);            
@@ -37,9 +69,38 @@ class AfficheCodexController extends AbstractController
         $medoc = $doctrine->getRepository(SAVUUTIL::class, 'codex')->findLike_nomVU_nomSubstance('','');
         return $this->render('affiche_codex/index.html.twig', [
             'form_rech_med' => $form->createView(),
+            'form_select_med' => $formSelectMedic->createView(),
             'controller_name' => 'AfficheCodexController',
             'medoc' => $medoc
         ]);
+    }
+
+    /**
+     * Renvoi un array avec les NomVU d'une entité SAVUUTIL
+     *
+     * @param [type] $entity
+     * @return Array
+     */
+    public function EntityToArray_NomVU($entity) : Array
+    {   
+        foreach ($entity as $entite) {
+            $array[] = $entite->getNomVU();
+        }
+        return $array;
+    }
+    
+    /**
+     * Renvoi un array avec les NomVU d'une entité SAVUUTIL
+     *
+     * @param [type] $entity
+     * @return Array
+     */
+    public function EntityToArray_CodeVU($entity) : Array
+    {   
+        foreach ($entity as $entite) {
+            $array[] = $entite->getCodeVU();
+        }
+        return $array;
     }
 
 
@@ -60,7 +121,7 @@ class AfficheCodexController extends AbstractController
                 ]
             ])
             ->getForm();
-        return $this->render('search/searchBar.html.twig', [
+            return $this->render('search/searchBar.html.twig', [
             'form' => $form->createView()
         ]);
     }
