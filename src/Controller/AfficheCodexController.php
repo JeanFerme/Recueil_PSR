@@ -11,6 +11,8 @@ use App\Entity\Codex\SAVUUTIL;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Repository\Codex\SAVUUTILRepository;
 
 
 class AfficheCodexController extends AbstractController
@@ -33,25 +35,31 @@ class AfficheCodexController extends AbstractController
         // Liste des médicaments recherchés
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $medoc = $doctrine->getRepository(SAVUUTIL::class, 'codex')->findLike_nomVU_nomSubstance($data['denomination'],$data['DCI']);}
+            $medoc = $doctrine->getRepository(SAVUUTIL::class, 'codex')->findLike_nomVU_nomSubstance($data['denomination'],$data['DCI']);
+            $deno=$data['denomination'];
+            $DCI=$data['DCI'];
+        }
         else {
             $medoc = $doctrine->getRepository(SAVUUTIL::class, 'codex')->findLike_nomVU_nomSubstance('','');
+            $deno='';
+            $DCI='';
         }
 
 
         // Formulaire pour populer le menu déroulant
         $formSelectMedic = $this 
-                    ->createFormBuilder()
-                    ->add('denomination',ChoiceType::class, 
-                            ['choices' => [
-                                'One' => 1,
-                                'Two' => 2,
-                                ],
-                            ]
-                        )                   
-                    ->add('submit', SubmitType::class, ['label' => 'Selection du médicament'])
-                    ->getForm()
-                    ;
+                            ->createFormBuilder()                
+                            ->add('denomination',EntityType::class, [
+                                'class' => SAVUUTIL::class,
+                                // 'choice_label' => fn(SAVUUTIL $SAVU) => $SAVU->getCodeVU() . ' - ' . $SAVU->getNomVU()
+                                'choice_label' => 'NomVU',
+                                'placeholder' => 'Merci de sélectionner un médicament',
+                                'query_builder' => function (SAVUUTILRepository $SAVUUTILRepo) use ( $deno, $DCI ){
+                                        return $SAVUUTILRepo->findLike_nomVU_nomSubstance_QB($deno, $DCI);}
+                                    ])
+                            ->add('submit', SubmitType::class, ['label' => 'Selection du médicament'])
+                            ->getForm()
+                            ;
         $formSelectMedic->handleRequest($request); 
         
         if ($form->isSubmitted() && $form->isValid()) {
@@ -64,6 +72,18 @@ class AfficheCodexController extends AbstractController
                 'controller_name' => 'AfficheCodexController',
                 'medoc' => $medoc
             ]);            
+        }
+        if ($formSelectMedic->isSubmitted() && $formSelectMedic->isValid()) {
+            $dataSelectMedic = $formSelectMedic->getData();
+            dd($dataSelectMedic);
+            // $medoc = $doctrine->getRepository(SAVUUTIL::class, 'codex')->findLike_nomVU_nomSubstance($data['denomination'],$data['DCI']);
+            // dump($data);
+            // return $this->render('affiche_codex/index.html.twig', [
+            //     'form_rech_med' => $form->createView(),
+            //     'form_select_med' => $formSelectMedic->createView(),
+            //     'controller_name' => 'AfficheCodexController',
+            //     'medoc' => $medoc
+            // ]);            
         }
 
         $medoc = $doctrine->getRepository(SAVUUTIL::class, 'codex')->findLike_nomVU_nomSubstance('','');

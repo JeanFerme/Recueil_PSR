@@ -4,6 +4,7 @@ namespace App\Repository\Codex;
 
 use App\Entity\Codex\SAVUUTIL;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -59,6 +60,24 @@ class SAVUUTILRepository extends ServiceEntityRepository
         ;
     }
 
+//    /**
+//      * recherche par DCI des medicaments dans CODEX
+//      *
+//     * @param [string] $value
+//     * @return SAVUUTIL[] Returns a QueryBuilder of SAVUUTIL objects
+//     */
+//     public function findLikenomSubstance_QB($value) : QueryBuilder
+//     {
+//         return $this->createQueryBuilder('s')
+//              // ->andWhere('s.nomSubstance = :val')
+//              // ->setParameter('val', $value)
+//              ->andWhere('s.nomSubstance LIKE :val')
+//              ->setParameter('val', '%' . $value . '%')
+//              ->orderBy('s.id', 'ASC')
+
+//         ;
+//     }
+
    /**
     * recherche par denomination des medicaments dans CODEX
     *
@@ -75,6 +94,8 @@ class SAVUUTILRepository extends ServiceEntityRepository
                     ->getResult()
                 ;
     }
+
+    
     /**
      * recherche par denomination et/ou DCI des medicaments dans CODEX
      *
@@ -105,6 +126,38 @@ class SAVUUTILRepository extends ServiceEntityRepository
                         ->orderBy('s.id', 'ASC')
                         ->getQuery()
                         ->getResult()
+                        ;
+            return $result;
+    }
+    
+    /**
+     * recherche par denomination et/ou DCI des medicaments dans CODEX
+     *
+     * @param [string] $deno
+     * @param [string] $DCI
+     * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
+     */
+    public function findLike_nomVU_nomSubstance_QB($deno, $DCI): QueryBuilder
+    {
+        $result = $this->createQueryBuilder('s');
+        if ($deno != '' and $DCI != '' ) {
+            $result = $result 
+                        ->andWhere('s.nomVU LIKE :deno AND s.nomSubstance LIKE :DCI')
+                        ->setParameter('deno', '%' . $deno . '%')
+                        ->setParameter('DCI', '%' . $DCI . '%');
+        } elseif ($deno == '' and $DCI != '' ) {
+            $result = $result 
+                        ->andWhere('s.nomSubstance LIKE :DCI')
+                        ->setParameter('DCI', '%' . $DCI . '%');
+        } elseif ($deno != '' and $DCI == '' ) {
+            $result = $result 
+                        ->andWhere('s.nomVU LIKE :deno')
+                        ->setParameter('deno', '%' . $deno . '%');
+        } else {
+            $result = $result ->setMaxResults(100);
+        }
+            $result = $result
+                        ->orderBy('s.id', 'ASC')
                         ;
             return $result;
     }
