@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AfficheCodexController!{% endblock %}
+
+{% block body %}
+
+
+<div class="container">
+    {# <h1>Hello {{ controller_name }}! ✅</h1> #}
+
+    {# This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code><a href="{{ 'D:/www_htdocs/Recueil_PSR/src/Controller/AfficheCodexController.php'|file_link(0) }}">src/Controller/AfficheCodexController.php</a></code></li>
+        <li>Your template at <code><a href="{{ 'D:/www_htdocs/Recueil_PSR/templates/affiche_codex/index.html.twig'|file_link(0) }}">templates/affiche_codex/index.html.twig</a></code></li>
+    </ul> #}
+
+
+        {{ form_start(form_rech_med) }}
+        <div class="container p-4">
+            <div class="row">
+                <div class="col-2">
+                    <p class="text-center">
+                        {{ form_label(form_rech_med.denomination, "Dénomination : ") }}
+                    </p>
+                </div>       
+
+            {#        {{ form_errors(form_rech_med.produit) }}#}
+                <div class="col-10">
+                    {{ form_widget(form_rech_med.denomination, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="col-2">
+                    <p class="text-center">
+                        {{ form_label(form_rech_med.DCI, "DCI : ") }}
+                    </p>
+                </div>  
+                <div class="col-10">
+                    {{ form_widget(form_rech_med.DCI, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="col text-center">
+                    {{ form_row(form_rech_med.submit, {'attr':{'class': 'btn btn-primary'}}) }}           
+                </div>
+            </div>
+        </div>
+
+        {{ form_end(form_rech_med) }}
+
+
+        {{ form_start(form_select_med) }}
+
+
+        <div class="container p-4">
+            <div class="row">  
+                <div class="col-10">
+
+        {# <div class="container p-4">
+            <select  class="form-select" aria-label="DropDownMedicament" name="DropDownMedicament">
+                <option selected>choisissez un médicament</option>
+                {% for medoc in medoc %}
+                    <option value="{{ loop.index }}">
+                        {{ loop.index }} - {{ medoc.nomVU }} / {{ medoc.nomSubstance }} / {{ medoc.DboClasseATCLibAbr }} 
+                    </option>
+                {% endfor %}
+            </select>
+        </div> #}
+
+
+                
+                    {{ form_widget(form_select_med.denomination, {'attr': {'class': 'form-select'}}) }}
+
+                    {# <select id="form_denomination" name="form[denomination]" class="form-select">
+                        <option selected>choisissez un médicament</option>
+                        {% for medoc in medoc %}
+                            <option value="{{ loop.index }}">
+                                {{ loop.index }} - {{ medoc.nomVU }} / {{ medoc.nomSubstance }} / {{ medoc.DboClasseATCLibAbr }} 
+                            </option>
+                        {% endfor %}
+                    </select> #}
+
+
+
+
+
+                    
+                </div>
+
+                <div class="col text-center">
+                    {{ form_row(form_select_med.submit, {'attr':{'class': 'btn btn-primary'}}) }}           
+                </div>
+
+            </div>
+        </div>
+
+
+
+        {# <div class="container p-4">
+            <select  class="form-select" aria-label="DropDownMedicament" name="DropDownMedicament">
+                <option selected>choisissez un médicament</option>
+                {% for medoc in medoc %}
+                    <option value="{{ loop.index }}">
+                        {{ loop.index }} - {{ medoc.nomVU }} / {{ medoc.nomSubstance }} / {{ medoc.DboClasseATCLibAbr }} 
+                    </option>
+                {% endfor %}
+            </select>
+        </div> #}
+        {{ form_end(form_select_med) }}
+    <table class="table table-dark table-striped">
+        <thead>
+          <tr>
+            <th>nomVU</th>
+            <th>nomSubstance</th>
+            <th>ClasseATC</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for medoc in medoc %}
+                <tr>
+                    <td>{{ medoc.nomVU }}</td>
+                    <td>{{ medoc.nomSubstance }}</td>
+                    <td>{{ medoc.DboClasseATCLibAbr }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+
+
+
+
+    {# {{ dump(medoc) }} #}
+
+</div>
+{% endblock %}

@@ -4,6 +4,7 @@ namespace App\Repository\Codex;
 
 use App\Entity\Codex\SAVUUTIL;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,28 +40,125 @@ class SAVUUTILRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   /**
+     * recherche par DCI des medicaments dans CODEX
+     *
+    * @param [string] $value
+    * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
+    */
+    public function findLikenomSubstance($value): array
+    {
+        return $this->createQueryBuilder('s')
+             // ->andWhere('s.nomSubstance = :val')
+             // ->setParameter('val', $value)
+             ->andWhere('s.nomSubstance LIKE :val')
+             ->setParameter('val', '%' . $value . '%')
+             ->orderBy('s.id', 'ASC')
+         //    ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
-//    public function findOneBySomeField($value): ?SAVUUTIL
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+//    /**
+//      * recherche par DCI des medicaments dans CODEX
+//      *
+//     * @param [string] $value
+//     * @return SAVUUTIL[] Returns a QueryBuilder of SAVUUTIL objects
+//     */
+//     public function findLikenomSubstance_QB($value) : QueryBuilder
+//     {
+//         return $this->createQueryBuilder('s')
+//              // ->andWhere('s.nomSubstance = :val')
+//              // ->setParameter('val', $value)
+//              ->andWhere('s.nomSubstance LIKE :val')
+//              ->setParameter('val', '%' . $value . '%')
+//              ->orderBy('s.id', 'ASC')
+
+//         ;
+//     }
+
+   /**
+    * recherche par denomination des medicaments dans CODEX
+    *
+    * @param [string] $value
+    * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
+    */
+    public function findLikenomVU($value): array
+    {
+        return $this->createQueryBuilder('s')
+                    ->andWhere('s.nomVU LIKE :val')
+                    ->setParameter('val', '%' . $value . '%')
+                    ->orderBy('s.id', 'ASC')
+                    ->getQuery()
+                    ->getResult()
+                ;
+    }
+
+    
+    /**
+     * recherche par denomination et/ou DCI des medicaments dans CODEX
+     *
+     * @param [string] $deno
+     * @param [string] $DCI
+     * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
+     */
+    public function findLike_nomVU_nomSubstance($deno, $DCI): array
+    {
+        $result = $this->createQueryBuilder('s');
+        if ($deno != '' and $DCI != '' ) {
+            $result = $result 
+                        ->andWhere('s.nomVU LIKE :deno AND s.nomSubstance LIKE :DCI')
+                        ->setParameter('deno', '%' . $deno . '%')
+                        ->setParameter('DCI', '%' . $DCI . '%');
+        } elseif ($deno == '' and $DCI != '' ) {
+            $result = $result 
+                        ->andWhere('s.nomSubstance LIKE :DCI')
+                        ->setParameter('DCI', '%' . $DCI . '%');
+        } elseif ($deno != '' and $DCI == '' ) {
+            $result = $result 
+                        ->andWhere('s.nomVU LIKE :deno')
+                        ->setParameter('deno', '%' . $deno . '%');
+        } else {
+            $result = $result ->setMaxResults(100);
+        }
+            $result = $result
+                        ->orderBy('s.id', 'ASC')
+                        ->getQuery()
+                        ->getResult()
+                        ;
+            return $result;
+    }
+    
+    /**
+     * recherche par denomination et/ou DCI des medicaments dans CODEX
+     *
+     * @param [string] $deno
+     * @param [string] $DCI
+     * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
+     */
+    public function findLike_nomVU_nomSubstance_QB($deno, $DCI): QueryBuilder
+    {
+        $result = $this->createQueryBuilder('s');
+        if ($deno != '' and $DCI != '' ) {
+            $result = $result 
+                        ->andWhere('s.nomVU LIKE :deno AND s.nomSubstance LIKE :DCI')
+                        ->setParameter('deno', '%' . $deno . '%')
+                        ->setParameter('DCI', '%' . $DCI . '%');
+        } elseif ($deno == '' and $DCI != '' ) {
+            $result = $result 
+                        ->andWhere('s.nomSubstance LIKE :DCI')
+                        ->setParameter('DCI', '%' . $DCI . '%');
+        } elseif ($deno != '' and $DCI == '' ) {
+            $result = $result 
+                        ->andWhere('s.nomVU LIKE :deno')
+                        ->setParameter('deno', '%' . $deno . '%');
+        } else {
+            $result = $result ->setMaxResults(100);
+        }
+            $result = $result
+                        ->orderBy('s.id', 'ASC')
+                        ;
+            return $result;
+    }
 }
