@@ -1,48 +1,47 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Hello FirstController!
+  Recueil PSR
 {% endblock %}
-
 {% block body %}
-  <div class="container">
-    <a class="btn btn-primary" href="{{ path('app_create_rec') }}" role="button">New Recueil</a>
-    <table class="table">
+  <div class="container" id="main-container">
+    <a class="btn btn-primary" href="{{ path('app_create_rec', {'id' : '0'}) }}" role="button">Créer un nouveau Recueil</a>
+    <table class="table table-hover">
       <thead>
         <tr>
-          <th scope="col">Origine</th>
-          <th scope="col">DMM</th>
+          <th scope="col">Origine <i class="fa fa-fw fa-sort" onclick="location.href='{{ path('app_show_recueil', {'sortFilter' : 'origine'}) }}';"></i></th>
+          <th scope="col">DMM <i class="fa fa-fw fa-sort" onclick="location.href='{{ path('app_show_recueil', {'sortFilter' : 'dmm'}) }}';"></i></th>
           <th scope="col">Substance</th>
           <th scope="col">Produit</th>
           <th scope="col">Code ATC</th>
-          <th scope="col">Niveau de risque</th>
+          <th scope="col">Problematique</th>
+          <th scope="col">Resultat surv</th>
           <th scope="col">Mesure de maitrise</th>
+          <th scope="col">Mesure d' impact</th>
           <th scope="col">Proposition d'outil de surv</th>
-          <th scope="col">Modifier</th>
+          <th scope="col">Commentaire</th>
+          <th scope="col">Année du PSR</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">testOrigine</th>
-          <td>testDMM</td>
-          <td>Substance</td>
-          <td>Produit</td>
-          <td>code_atc</td>
-          <td>level</td>
-          <td>mesMait</td>
-          <td>propOut</td>
-          <td><button>modifier</button></td>
-        </tr>
-        {% for en in tables %}
-          <tr>
+        {% for en in tables|origine(sortFilter) %}
+          <tr onclick="location.href='{{ path('app_create_rec', {'id' : en.id}) }}';">
             <td>{{ en.origine.origine }}</td>
             <td>{{ en.dmm.pole }}</td>
             <td>{{ en.substance }}</td>
             <td>{{ en.produit }}</td>
             <td>{{ en.codeatc }}</td>
-            <td>{{ en.niveaurisque }}</td>
+            <td>{{ en.problematique }}</td>
+            <td>{{ en.resultatSurv }}</td>
             <td>{{ en.mesMaitRisk }}</td>
-            <td>Proposition bidon</td>
+            <td>{{ en.mesImpact.libelle }} {{ en.mesImpactComment }}</td>
+            <td>
+                {% for prop in en.propSurv %}  
+                {{prop.Proposition}}
+                {% endfor %}
+            </td>
+            <td>{{ en.commentaire }}</td>
+            <td>{{ en.listSurv.year }}</td>
           </tr>
         {% endfor %}
       </tbody>

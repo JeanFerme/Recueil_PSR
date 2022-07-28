@@ -93,14 +93,14 @@ class RecPSRTable
     private $commentaire;
 
     /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
-    private $listSurv;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $visible;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=ListSurvRef::class, inversedBy="recPSRTables")
+     */
+    private $listSurv;
 
     public function __construct()
     {
@@ -292,18 +292,6 @@ class RecPSRTable
         return $this;
     }
 
-    public function getListSurv(): ?string
-    {
-        return $this->listSurv;
-    }
-
-    public function setListSurv(?string $listSurv): self
-    {
-        $this->listSurv = $listSurv;
-
-        return $this;
-    }
-
     public function isVisible(): ?bool
     {
         return $this->visible;
@@ -312,6 +300,18 @@ class RecPSRTable
     public function setVisible(bool $visible): self
     {
         $this->visible = $visible;
+
+        return $this;
+    }
+
+    public function getListSurv(): ?ListSurvRef
+    {
+        return $this->listSurv;
+    }
+
+    public function setListSurv(?ListSurvRef $listSurv): self
+    {
+        $this->listSurv = $listSurv;
 
         return $this;
     }

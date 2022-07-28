@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Main\DMMRef;
+use App\Entity\Main\ListSurvRef;
 use App\Entity\Main\MesImpact;
 use App\Entity\Main\OrigineRef;
 use App\Entity\Main\PropOutSurvRef;
@@ -22,18 +23,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class CreateRecController extends AbstractController
 {
     /** 
-     * @Route("/newrec", name="app_create_rec")
+     * @Route("/newrec/{id}", name="app_create_rec")
      * @param Request
      */
-    public function index(ManagerRegistry $doctrine, Request $request): Response
+    public function index($id ,ManagerRegistry $doctrine, Request $request): Response
     {
+        $this->updateListSurv($doctrine);
+
         $em = $doctrine->getManager();
-
-        $recueil = new RecPSRTable();
-
-        $mesImpact = new MesImpact();
-        $mesImpact->setLibelle('next');
-        $em->persist($mesImpact);
+   
+        if($id == 0) {
+            $recueil = new RecPSRTable();
+        } else {
+            $recueil = $em->find(RecPSRTable::class, $id);
+        }
 
         $form = $this->createFormBuilder($recueil)
             ->add('origine', EntityType::class, [
@@ -49,9 +52,6 @@ class CreateRecController extends AbstractController
                 'multiple' => true,
                 'expanded' => true,
                 'choice_label' => 'proposition',
-                //'choice_attr' => function($choice, $key, $value) {
-                //return ['class' => 'col-sm'];
-                //}
             ])
             ->add('niveau_de_risque', IntegerType::class, ['property_path' => 'niveau_risque'])
             ->add('problematique', TextType::class)
@@ -65,20 +65,24 @@ class CreateRecController extends AbstractController
             ])
             ->add('mesImpactComment', TextareaType::class)
             ->add('commentaire', TextareaType::class)
-            ->add('listSurv', TextType::class)
+            ->add('listSurv', EntityType::class, [
+                'class' => ListSurvRef::class,
+                'choice_label' => 'year',
+            ])
             ->add('visible', CheckboxType::class, [
-                'label' => 'isVisible',
+                'label' => 'isVisible', 
                 'required' => false,
             ])
             ->add('save', SubmitType::class, ['label' => 'create Recueil'])
             ->getForm();
 
         $form->handleRequest($request);
-        dump($form);
         if ($form->isSubmitted() && $form->isValid()) {
             $recueil = $form->getData();
             $em->persist($recueil);
             $em->flush();
+
+            return $this->redirectToRoute('app_show_recueil');
         }
 
         return $this->renderForm('create_rec/form.html.twig', [
@@ -91,8 +95,8 @@ class CreateRecController extends AbstractController
         ]);*/
     }
 
-    #[Route('/showrec', name: 'app_show_recueil')]
-    public function newRec(ManagerRegistry $doctrine)
+    #[Route('/showrec/{sortFilter}', name: 'app_show_recueil')]
+    public function newRec($sortFilter, ManagerRegistry $doctrine)
     {
         $tables = $doctrine->getRepository(RecPSRTable::class)->findAll();
 
@@ -101,6 +105,35 @@ class CreateRecController extends AbstractController
         return $this->render('create_rec/table.html.twig', [
             'controller_name' => 'FirstController',
             'tables' => $tables,
+            'sortFilter' => $sortFilter,
         ]);
+    }
+
+    protected function updateListSurv(ManagerRegistry $doctrine): void {
+        $currentYear = date("Y");
+        $changed = false;
+
+        $year = $doctrine->getRepository(ListSurvRef::class)->findOneBy(array('year' => $currentYear));
+        $yearPlus = $doctrine->getRepository(ListSurvRef::class)->findOneBy(array('year' => $currentYear+1));
+
+        $em = $doctrine->getManager();
+
+        if($year == null) {
+            $changed = true;
+            $data = new ListSurvRef();
+            $data->setYear($currentYear);
+            $em->persist($data);
+        }
+
+        if($yearPlus == null) {
+            $changed = true;
+            $data = new ListSurvRef();
+            $data->setYear($currentYear+1);
+            $em->persist($data);
+        }
+
+        if($changed) {
+            $em->flush();
+        }
     }
 }
