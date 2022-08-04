@@ -100,9 +100,7 @@ class CreateRecController extends AbstractController
     public function newRec($sortFilter, ManagerRegistry $doctrine)
     {
         $tables = $doctrine->getRepository(RecPSRTable::class)->findAll();
-
-        dump($tables);
-
+        
         return $this->render('create_rec/table.html.twig', [
             'controller_name' => 'FirstController',
             'tables' => $tables,

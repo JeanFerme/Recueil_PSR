@@ -106,7 +106,38 @@
         </div> #}
         {{ form_end(form_select_med) }}
 
-        {{ form(form_rec) }}
+        {{ form_start(form_rec) }}
+
+    <div class="row">
+        {{ form_row(form_rec.produit, {'row_attr': {'class' : 'col'}}) }}
+        {{ form_row(form_rec.substance, {'row_attr': {'class' : 'col'}}) }}
+    </div>
+    <div class="row">
+        {{ form_row(form_rec.origine, {'row_attr': {'class' : 'col'}}) }}
+        {{ form_row(form_rec.dmm, {'row_attr': {'class' : 'col'}}) }}
+        {{ form_row(form_rec.niveau_de_risque, {'row_attr': {'class' : 'col'}}) }}
+    </div>
+    <div class="row">
+        {{ form_row(form_rec.problematique, {'row_attr': {'class' : 'col'}}) }}
+        {{ form_row(form_rec.priorisation, {'row_attr': {'class' : 'col'}}) }}
+    </div>
+    <div class="row">
+        {#{ form_label(form_rec.propSurv) }#}
+        <legend class="col-form-label required">Proposition d'outil de surveillance</legend>
+        {% for child in form_rec.propSurv.children %}
+            {{ form_row(child, {'row_attr' : {'class' : 'col'}}) }}
+        {% endfor %}
+    </div>   
+    {{ form_row(form_rec.resultat_surv) }}
+    
+    {{ form_row(form_rec.mesure_de_maitrise_de_risque) }}
+    {{ form_row(form_rec.mesure_dimpact) }}
+    {{ form_row(form_rec.mesImpactComment) }}
+    {{ form_row(form_rec.commentaire) }}
+    {{ form_row(form_rec.listSurv) }}
+    {{ form_row(form_rec.visible) }}
+
+    {{ form_end(form_rec) }}
 
 
 

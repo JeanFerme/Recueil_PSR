@@ -13,18 +13,25 @@ use App\Form\Rec\RecType;
 use App\Form\Seek\SeekType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Repository\Codex\SAVUUTILRepository;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
 class AfficheCodexController extends AbstractController
 {
-    #[Route('/affiche_codex/{denomination}/{dci}', name: 'app_affiche_codex_arg')]
-    #[Route('/affiche_codex', name: 'app_affiche_codex')]
-    public function index(Request $request, ManagerRegistry $doctrine, $dci='', $denomination=''): Response
+    #[Route('/affiche_codex', name: 'app_affiche_new_codex')]
+    public function redirectCodex(): RedirectResponse
+    {
+        return $this->redirectToRoute('app_affiche_codex', ['id' => '0']);
+    }
+
+    #[Route('/affiche_codex/{id}', name: 'app_affiche_codex')]
+    public function index(Request $request, ManagerRegistry $doctrine, $id): Response
     {   
-        dump($request);
+        $em = $doctrine->getManager();
+        $deno = $_GET['denomination'] ?? '';
+        $dci = $_GET['dci'] ?? '';
 
         // Formulaire de recherche des médicaments par dénomination et/ou DCI
         /*$seekForm =$this->createFormBuilder()
@@ -43,9 +50,9 @@ class AfficheCodexController extends AbstractController
             $deno=$data['denomination'];
             $dataDCI=$data['DCI'];
 
-            return $this->redirectToRoute('app_affiche_codex_arg', ['denomination' => $deno, 'dci' => $dataDCI]);
+            return $this->redirectToRoute('app_affiche_codex', ['denomination' => $deno, 'dci' => $dataDCI, 'id' => $id]);
         }
-
+        
         // Formulaire pour populer le menu déroulant
         $formSelectMedic = $this 
                             ->createFormBuilder()                
@@ -53,8 +60,8 @@ class AfficheCodexController extends AbstractController
                                 'class' => SAVUUTIL::class,
                                 'choice_label' => 'NomVU',
                                 'placeholder' => 'Merci de sélectionner un médicament',
-                                'query_builder' => function (SAVUUTILRepository $SAVUUTILRepo) use ( $denomination, $dci){
-                                        return $SAVUUTILRepo->findLike_nomVU_nomSubstance_QB($denomination, $dci, 100);}
+                                'query_builder' => function (SAVUUTILRepository $SAVUUTILRepo) use ( $deno, $dci){
+                                        return $SAVUUTILRepo->findLike_nomVU_nomSubstance_QB($deno, $dci, 100);}
                                     ])
                             ->add('submit', SubmitType::class, ['label' => 'Selection du médicament'])
                             ->getForm()
@@ -66,21 +73,37 @@ class AfficheCodexController extends AbstractController
         //$formSelectMedic->handleRequest($request); 
 
         //Formulaire de l'entité recueil
-        $recueil = new RecPSRTable();
+        if($id == 0) {
+            $recueil = new RecPSRTable();
+        } else {
+            $recueil = $em->find(RecPSRTable::class, $id);
+        }
 
         if ($formSelectMedic->isSubmitted() && $formSelectMedic->isValid()) {
             $savutil = $formSelectMedic->getData()['savuutil'];
-            dump($savutil);
             $recueil->setProduit($savutil->getNomVu());
             $recueil->setSubstance($savutil->getNomSubstance());
+            $codeVu = $savutil->getCodeVU();
+            $recueil->setCodeVU(intval($codeVu, 10));
+            $recueil->setCodeAtc($savutil->getDboClasseATCLibAbr());
         }
 
         $formRec = $this->createForm(RecType::class, $recueil);
 
+        $formRec->handleRequest($request);
+
+        if ($formRec->isSubmitted() && $formRec->isValid()) {
+            $recueil = $formRec->getData();
+            $em->persist($recueil);
+            $em->flush();
+
+            return $this->redirectToRoute('app_show_recueil', ['sortFilter' => 'origine']);
+        }
+
         if ($seekForm->isSubmitted() && $seekForm->isValid()) {
             //$data = $form->getData();
             //$medoc = $doctrine->getRepository(SAVUUTIL::class, 'codex')->findLike_nomVU_nomSubstance($data['denomination'],$data['DCI']);
-            dump($data);
+            //dump($data);
             return $this->render('affiche_codex/index.html.twig', [
                 'form_rech_med' => $seekForm->createView(),
                 'form_select_med' => $formSelectMedic->createView(),

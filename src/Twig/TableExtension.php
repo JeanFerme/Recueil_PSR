@@ -16,7 +16,6 @@ class TableExtension extends AbstractExtension
     }
 
     public function formatOrigine($item, string $param) {
-        dump($param);
         switch ($param) {
             case 'origine' :
                 usort($item, function(RecPSRTable $item1, RecPSRTable $item2) {

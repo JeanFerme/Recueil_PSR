@@ -14,14 +14,19 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class RecType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('produit', TextType::class)
-        ->add('substance', TextType::class)
+        ->add('produit', TextType::class, [
+            'attr' => ['readonly' => true]
+        ])
+        ->add('substance', TextType::class, [
+            'attr' => ['readonly' => true]
+        ])
         ->add('origine', EntityType::class, [
             'class' => OrigineRef::class,
             'choice_label' => 'origine',
@@ -36,7 +41,9 @@ class RecType extends AbstractType
             'expanded' => true,
             'choice_label' => 'proposition',
         ])
-        ->add('niveau_de_risque', IntegerType::class, ['property_path' => 'niveau_risque'])
+        ->add('niveau_de_risque', IntegerType::class, [
+            'required' => false,
+            'property_path' => 'niveau_risque'])
         ->add('problematique', TextType::class)
         ->add('resultat_surv', TextareaType::class)
         ->add('priorisation', IntegerType::class)
@@ -56,6 +63,8 @@ class RecType extends AbstractType
             'label' => 'isVisible', 
             'required' => false,
         ])
+        ->add('codeVU', HiddenType::class)
+        ->add('code_atc', HiddenType::class)
         ->add('save', SubmitType::class, ['label' => 'create Recueil'])
         ;
     }
