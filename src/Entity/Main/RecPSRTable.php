@@ -102,6 +102,11 @@ class RecPSRTable
      */
     private $listSurv;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $codeVU;
+
     public function __construct()
     {
         $this->propSurv = new ArrayCollection();
@@ -312,6 +317,18 @@ class RecPSRTable
     public function setListSurv(?ListSurvRef $listSurv): self
     {
         $this->listSurv = $listSurv;
+
+        return $this;
+    }
+
+    public function getCodeVU(): ?int
+    {
+        return $this->codeVU;
+    }
+
+    public function setCodeVU(?int $codeVU): self
+    {
+        $this->codeVU = $codeVU;
 
         return $this;
     }

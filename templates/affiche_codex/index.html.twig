@@ -67,7 +67,7 @@
 
 
                 
-                    {{ form_widget(form_select_med.denomination, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_widget(form_select_med.savuutil, {'attr': {'class': 'form-select'}}) }}
 
                     {# <select id="form_denomination" name="form[denomination]" class="form-select">
                         <option selected>choisissez un médicament</option>
@@ -105,25 +105,8 @@
             </select>
         </div> #}
         {{ form_end(form_select_med) }}
-    <table class="table table-dark table-striped">
-        <thead>
-          <tr>
-            <th>nomVU</th>
-            <th>nomSubstance</th>
-            <th>ClasseATC</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for medoc in medoc %}
-                <tr>
-                    <td>{{ medoc.nomVU }}</td>
-                    <td>{{ medoc.nomSubstance }}</td>
-                    <td>{{ medoc.DboClasseATCLibAbr }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-      </table>
 
+        {{ form(form_rec) }}
 
 
 

@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -107,6 +108,12 @@ class CreateRecController extends AbstractController
             'tables' => $tables,
             'sortFilter' => $sortFilter,
         ]);
+    }
+
+    #[Route('/showrec', name: 'app_show_rec')]
+    public function showRec(): RedirectResponse
+    {
+        return $this->redirectToRoute('app_show_recueil', ['sortFilter' => 'origine']);
     }
 
     protected function updateListSurv(ManagerRegistry $doctrine): void {

@@ -14,6 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method SAVUUTIL|null findOneBy(array $criteria, array $orderBy = null)
  * @method SAVUUTIL[]    findAll()
  * @method SAVUUTIL[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method SAVUUTIL[]    findLike_nomVU_nomSubstance([string] $deno, [string] $DCI)
  */
 class SAVUUTILRepository extends ServiceEntityRepository
 {
@@ -135,9 +136,10 @@ class SAVUUTILRepository extends ServiceEntityRepository
      *
      * @param [string] $deno
      * @param [string] $DCI
+     * @param int maxResults
      * @return SAVUUTIL[] Returns an array of SAVUUTIL objects
      */
-    public function findLike_nomVU_nomSubstance_QB($deno, $DCI): QueryBuilder
+    public function findLike_nomVU_nomSubstance_QB($deno, $DCI, $maxResults): QueryBuilder
     {
         $result = $this->createQueryBuilder('s');
         if ($deno != '' and $DCI != '' ) {
@@ -153,12 +155,12 @@ class SAVUUTILRepository extends ServiceEntityRepository
             $result = $result 
                         ->andWhere('s.nomVU LIKE :deno')
                         ->setParameter('deno', '%' . $deno . '%');
-        } else {
-            $result = $result ->setMaxResults(100);
+        /*} else {
+            $result = $result ->setMaxResults($maxResults);*/
         }
             $result = $result
                         ->orderBy('s.id', 'ASC')
                         ;
-            return $result;
+            return $result->setMaxResults($maxResults);
     }
 }
