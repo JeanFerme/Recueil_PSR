@@ -122,6 +122,21 @@ class AfficheCodexController extends AbstractController
     }
 
     /**
+     * Delete an Entity then redirect to the table
+     * 
+     * @Route("/delete/{id}", name="app_delete_psr")
+    */
+    public function deletePSR(request $request, $id, ManagerRegistry $doctrine) : RedirectResponse {
+        $em = $doctrine->getManager();
+
+        $entity = $em->find(RecPSRTable::class, $id);
+        $em->remove($entity);
+        $em->flush();
+
+        return $this->redirectToRoute('app_show_recueil', ['sortFilter' => 'origine']);
+    }
+
+    /**
      * Renvoi un array avec les NomVU d'une entité SAVUUTIL
      *
      * @param [type] $entity

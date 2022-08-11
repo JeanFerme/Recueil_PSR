@@ -4,11 +4,11 @@
   Recueil PSR
 {% endblock %}
 {% block body %}
-  <div class="container" id="main-container">
-    <a class="btn btn-primary" href="{{ path('app_affiche_new_codex') }}" role="button">Créer un nouveau Recueil</a>
+  <div class="" id="main-container">
     <table class="table table-hover">
       <thead>
         <tr>
+          <th scope="col"><a class="btn btn-primary" href="{{ path('app_affiche_new_codex') }}" role="button">Nouveau PSR</a></th>
           <th scope="col">Origine <i class="fa fa-fw fa-sort" onclick="location.href='{{ path('app_show_recueil', {'sortFilter' : 'origine'}) }}';"></i></th>
           <th scope="col">DMM <i class="fa fa-fw fa-sort" onclick="location.href='{{ path('app_show_recueil', {'sortFilter' : 'dmm'}) }}';"></i></th>
           <th scope="col">Substance</th>
@@ -25,7 +25,11 @@
       </thead>
       <tbody>
         {% for en in tables|origine(sortFilter) %}
-          <tr onclick="location.href='{{ path('app_affiche_codex', {'id' : en.id}) }}';">
+          <tr>
+            <td>
+              <a class="btn btn-success" href="{{ path('app_affiche_codex', {'id' : en.id}) }}" role="button">Modifier</a>
+              <a class="btn btn-secondary mt-1" href="{{ path('app_delete_psr', {'id' : en.id}) }}" role="button">Supprimer</a>
+            </td>
             <td>{{ en.origine.origine }}</td>
             <td>{{ en.dmm.pole }}</td>
             <td>{{ en.substance }}</td>
