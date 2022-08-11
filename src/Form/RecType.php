@@ -21,12 +21,8 @@ class RecType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('produit', TextType::class, [
-            'attr' => ['readonly' => true]
-        ])
-        ->add('substance', TextType::class, [
-            'attr' => ['readonly' => true]
-        ])
+        ->add('produit', TextType::class)
+        ->add('substance', TextType::class)
         ->add('origine', EntityType::class, [
             'class' => OrigineRef::class,
             'choice_label' => 'origine',
@@ -59,10 +55,7 @@ class RecType extends AbstractType
             'class' => ListSurvRef::class,
             'choice_label' => 'year',
         ])
-        ->add('visible', CheckboxType::class, [
-            'label' => 'isVisible', 
-            'required' => false,
-        ])
+        ->add('visible', HiddenType::class)
         ->add('codeVU', HiddenType::class)
         ->add('code_atc', HiddenType::class)
         ->add('save', SubmitType::class, ['label' => 'create Recueil'])

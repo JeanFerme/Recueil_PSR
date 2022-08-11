@@ -18,6 +18,8 @@ class PopulateController extends AbstractController
     {
         $em = $doctrine->getManager();
 
+        $changed = false;
+        //Origine : Enquête PV
         $criteria = array('origine' => 'Enquête PV');
         $origine = $em->getRepository(OrigineRef::class)->findBy($criteria);
 
@@ -26,9 +28,9 @@ class PopulateController extends AbstractController
             $origine->setOrigine('Enquête PV');
 
             $em->persist($origine);
-            $em->flush();
+            $changed = true;
         }
-
+        //Origine : Grossesse
         $criteria = array('origine' => 'Grossesse');
         $origine = $em->getRepository(OrigineRef::class)->findBy($criteria);
 
@@ -37,8 +39,65 @@ class PopulateController extends AbstractController
             $origine->setOrigine('Grossesse');
 
             $em->persist($origine);
-            $em->flush();
+            $changed = true;
         }
+        //Origine : AMM Franco-nationale
+        $criteria = array('origine' => 'AMM Franco-nationale');
+        $origine = $em->getRepository(OrigineRef::class)->findBy($criteria);
+
+        if (!$origine) {
+            $origine = new OrigineRef();
+            $origine->setOrigine('AMM Franco-nationale');
+
+            $em->persist($origine);
+            $changed = true;
+        }
+        //Origine : Classes et produits à risque a priori
+        $criteria = array('origine' => 'Classes et produits à risque a priori');
+        $origine = $em->getRepository(OrigineRef::class)->findBy($criteria);
+
+        if (!$origine) {
+            $origine = new OrigineRef();
+            $origine->setOrigine('Classes et produits à risque a priori');
+
+            $em->persist($origine);
+            $changed = true;
+        }
+        //Origine : HTAP
+        $criteria = array('origine' => 'HTAP');
+        $origine = $em->getRepository(OrigineRef::class)->findBy($criteria);
+
+        if (!$origine) {
+            $origine = new OrigineRef();
+            $origine->setOrigine('HTAP');
+
+            $em->persist($origine);
+            $changed = true;
+        }
+        //Origine : Prescrire
+        $criteria = array('origine' => 'Prescrire');
+        $origine = $em->getRepository(OrigineRef::class)->findBy($criteria);
+
+        if (!$origine) {
+            $origine = new OrigineRef();
+            $origine->setOrigine('Prescrire');
+
+            $em->persist($origine);
+            $changed = true;
+        }
+        //Origine : Situation médiatique à risque
+        $criteria = array('origine' => 'Situation médiatique à risque');
+        $origine = $em->getRepository(OrigineRef::class)->findBy($criteria);
+
+        if (!$origine) {
+            $origine = new OrigineRef();
+            $origine->setOrigine('Situation médiatique à risque');
+
+            $em->persist($origine);
+            $changed = true;
+        }
+
+        if ($changed) {$em->flush();}
 
         return $this->render('populate/index.html.twig', [
             'controller_name' => 'PopulateController',

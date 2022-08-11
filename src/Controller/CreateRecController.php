@@ -99,7 +99,7 @@ class CreateRecController extends AbstractController
     #[Route('/showrec/{sortFilter}', name: 'app_show_recueil')]
     public function newRec($sortFilter, ManagerRegistry $doctrine)
     {
-        $tables = $doctrine->getRepository(RecPSRTable::class)->findAll();
+        $tables = $doctrine->getRepository(RecPSRTable::class)->findBy(['visible' => true]);
         
         return $this->render('create_rec/table.html.twig', [
             'controller_name' => 'FirstController',

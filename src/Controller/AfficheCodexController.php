@@ -75,6 +75,7 @@ class AfficheCodexController extends AbstractController
         //Formulaire de l'entité recueil
         if($id == 0) {
             $recueil = new RecPSRTable();
+            $recueil->setVisible(true);
         } else {
             $recueil = $em->find(RecPSRTable::class, $id);
         }
@@ -130,7 +131,8 @@ class AfficheCodexController extends AbstractController
         $em = $doctrine->getManager();
 
         $entity = $em->find(RecPSRTable::class, $id);
-        $em->remove($entity);
+        $entity->setVisible(false);
+        //$em->remove($entity);
         $em->flush();
 
         return $this->redirectToRoute('app_show_recueil', ['sortFilter' => 'origine']);
