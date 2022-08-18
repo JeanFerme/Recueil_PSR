@@ -28,7 +28,7 @@
           <tr>
             <td>
               <a class="btn btn-success" href="{{ path('app_affiche_codex', {'id' : en.id}) }}" role="button">Modifier</a>
-              <a class="btn btn-secondary mt-1" href="{{ path('app_delete_psr', {'id' : en.id}) }}" role="button">Supprimer</a>
+              <a class="btn btn-secondary mt-1" href="{{ path('app_delete_psr', {'id' : en.id}) }}" onclick="return confirm('Voulez vous vraiment supprimer ce PSR ?')" role="button">Supprimer</a>
             </td>
             <td>{{ en.origine.origine }}</td>
             <td>{{ en.dmm.pole }}</td>

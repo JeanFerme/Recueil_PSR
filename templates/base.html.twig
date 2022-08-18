@@ -14,6 +14,21 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex flex-row justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_show_rec') }}">Home PSR</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('app_show_bin') }}">Bin PSR</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </head>
     <body>
         {% block body %}{% endblock %}

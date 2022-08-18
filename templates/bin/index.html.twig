@@ -1,20 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BinController!{% endblock %}
-
+{% block title %}
+  Recueil PSR
+{% endblock %}
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/xampp/htdocs/Recueil_PSR/src/Controller/BinController.php'|file_link(0) }}">src/Controller/BinController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/xampp/htdocs/Recueil_PSR/templates/bin/index.html.twig'|file_link(0) }}">templates/bin/index.html.twig</a></code></li>
-    </ul>
-</div>
+  <div class="" id="main-container">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col"><a class="btn btn-primary" href="{{ path('app_restore_bin') }}" role="button">Tout restaurer</a></th>
+          <th scope="col">Origine <i class="fa fa-fw fa-sort" onclick="location.href='{{ path('app_show_recueil', {'sortFilter' : 'origine'}) }}';"></i></th>
+          <th scope="col">DMM <i class="fa fa-fw fa-sort" onclick="location.href='{{ path('app_show_recueil', {'sortFilter' : 'dmm'}) }}';"></i></th>
+          <th scope="col">Substance</th>
+          <th scope="col">Produit</th>
+          <th scope="col">Code ATC</th>
+          <th scope="col">Problematique</th>
+          <th scope="col">Resultat surv</th>
+          <th scope="col">Mesure de maitrise</th>
+          <th scope="col">Mesure d' impact</th>
+          <th scope="col">Proposition d'outil de surv</th>
+          <th scope="col">Commentaire</th>
+          <th scope="col">Année du PSR</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for en in tables|origine(sortFilter) %}
+          <tr>
+            <td>
+              <a class="btn btn-success" href="{{ path('app_restore_one', {'id' : en.id}) }}" role="button">Restaurer</a>
+              <a class="btn btn-secondary mt-1" href="{{ path('app_empty_one', {'id' : en.id}) }}" onclick="return confirm('Voulez vous supprimer définitivement ce PSR ?')" role="button">Supprimer</a>
+            </td>
+            <td>{{ en.origine.origine }}</td>
+            <td>{{ en.dmm.pole }}</td>
+            <td>{{ en.substance }}</td>
+            <td>{{ en.produit }}</td>
+            <td>{{ en.codeatc }}</td>
+            <td>{{ en.problematique }}</td>
+            <td>{{ en.resultatSurv }}</td>
+            <td>{{ en.mesMaitRisk }}</td>
+            <td>{{ en.mesImpact.libelle }} {{ en.mesImpactComment }}</td>
+            <td>
+                {% for prop in en.propSurv %}  
+                {{prop.Proposition}}
+                {% endfor %}
+            </td>
+            <td>{{ en.commentaire }}</td>
+            <td>{{ en.listSurv.year }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}
