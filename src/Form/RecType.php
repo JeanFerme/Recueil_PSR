@@ -49,8 +49,12 @@ class RecType extends AbstractType
             'class' => MesImpact::class,
             'choice_label' => 'libelle',
         ])
-        ->add('mesImpactComment', TextareaType::class)
-        ->add('commentaire', TextareaType::class)
+        ->add('mesImpactComment', TextareaType::class, [
+            'required' => false,
+        ])
+        ->add('commentaire', TextareaType::class, [
+            'required' => false,
+        ])
         ->add('listSurv', EntityType::class, [
             'class' => ListSurvRef::class,
             'choice_label' => 'year',

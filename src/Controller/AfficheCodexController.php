@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Codex\SAVUUTIL;
+use App\Entity\Main\ListSurvRef;
 use App\Entity\Main\RecPSRTable;
 use App\Form\Rec\RecType;
 use App\Form\Seek\SeekType;
@@ -29,6 +30,8 @@ class AfficheCodexController extends AbstractController
     #[Route('/affiche_codex/{id}', name: 'app_affiche_codex')]
     public function index(Request $request, ManagerRegistry $doctrine, $id): Response
     {   
+        $this->updateListSurv($doctrine);
+
         $em = $doctrine->getManager();
         $deno = $_GET['denomination'] ?? '';
         $dci = $_GET['dci'] ?? '';
@@ -76,6 +79,7 @@ class AfficheCodexController extends AbstractController
         if($id == 0) {
             $recueil = new RecPSRTable();
             $recueil->setVisible(true);
+            $recueil->setPriorisation(1);
         } else {
             $recueil = $em->find(RecPSRTable::class, $id);
         }
@@ -187,5 +191,33 @@ class AfficheCodexController extends AbstractController
             return $this->render('search/searchBar.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    protected function updateListSurv(ManagerRegistry $doctrine): void {
+        $currentYear = date("Y");
+        $changed = false;
+
+        $year = $doctrine->getRepository(ListSurvRef::class)->findOneBy(array('year' => $currentYear));
+        $yearPlus = $doctrine->getRepository(ListSurvRef::class)->findOneBy(array('year' => $currentYear+1));
+
+        $em = $doctrine->getManager();
+
+        if($year == null) {
+            $changed = true;
+            $data = new ListSurvRef();
+            $data->setYear($currentYear);
+            $em->persist($data);
+        }
+
+        if($yearPlus == null) {
+            $changed = true;
+            $data = new ListSurvRef();
+            $data->setYear($currentYear+1);
+            $em->persist($data);
+        }
+
+        if($changed) {
+            $em->flush();
+        }
     }
 }

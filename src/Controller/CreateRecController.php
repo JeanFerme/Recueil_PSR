@@ -123,6 +123,7 @@ class CreateRecController extends AbstractController
 
         $em = $doctrine->getManager();
 
+        dump($year);
         if($year == null) {
             $changed = true;
             $data = new ListSurvRef();
