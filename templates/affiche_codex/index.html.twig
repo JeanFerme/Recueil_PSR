@@ -128,18 +128,18 @@
             {{ form_row(child, {'row_attr' : {'class' : 'col'}}) }}
         {% endfor %}
     </div>   
-    {{ form_row(form_rec.resultat_surv) }}
+    {{ form_row(form_rec.resultat_surv, {'attr': {'class': 'form-control'}}) }}
     
-    {{ form_row(form_rec.mesure_de_maitrise_de_risque) }}
-    {{ form_row(form_rec.mesure_dimpact) }}
-    {{ form_row(form_rec.mesImpactComment) }}
-    {{ form_row(form_rec.commentaire) }}
-    {{ form_row(form_rec.listSurv) }}
-    {{ form_row(form_rec.visible) }}
+    {{ form_row(form_rec.mesure_de_maitrise_de_risque, {'attr': {'class': 'form-control'}}) }}
+    {{ form_row(form_rec.mesure_dimpact, {'attr': {'class': 'form-control'}}) }}
+    {{ form_row(form_rec.mesImpactComment, {'attr': {'class': 'form-control'}}) }}
+    {{ form_row(form_rec.commentaire, {'attr': {'class': 'form-control'}}) }}
+    {{ form_row(form_rec.listSurv, {'attr': {'class': 'form-control'}}) }}
+    {{ form_row(form_rec.visible, {'attr': {'class': 'form-control'}}) }}
+
+    {{ form_row(form_rec.save, {'attr':{'class': 'btn btn-primary'}}) }}
 
     {{ form_end(form_rec) }}
-
-
 
     {# {{ dump(medoc) }} #}
 
